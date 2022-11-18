@@ -1,0 +1,29 @@
+---
+
+- name: Pull and install agent
+  hosts: local
+  become: yes
+  gather_facts: false
+
+  vars:
+    schedule: '*/15 * * * *'
+    cron_user: root
+    logfile: /var/log/ansible.log
+    workdir: /var/lib/ansible/local
+    repo_url: git@github.com:jemorr00/ansible-pull-agents.git
+
+  tasks:
+    - name: Install ansible
+      yum: pkg=ansible state=installed
+
+    - name: Create local working directory
+      file: path={{workdir}} state=directory owner=root group=root mode=0751
+
+    - name: Copy inventory to node
+      copy: src=/etc/ansible/hosts dest=/etc/ansible/hosts
+
+    - name: Schedule cronjob to pull repository
+      template: src=templates/etc_cron.d_ansible-pull.j2 dest=/etc/cron.d/ansible-pull owner=root group=root mode=0644
+
+    - name: Log rotate for ansible logs
+      template: src=templates/etc_logrotate.d_ansible-pull.j2 dest=/etc/logrotate.d/ansible-pull owner=root group=root mode=0644
