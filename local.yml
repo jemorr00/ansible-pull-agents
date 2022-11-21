@@ -1,7 +1,7 @@
 ---
 
 - name: Pull and install agent
-  hosts: local
+  hosts: nodes
   become: yes
   gather_facts: false
 
