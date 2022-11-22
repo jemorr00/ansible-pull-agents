@@ -10,7 +10,7 @@
     cron_user: root
     logfile: /var/log/ansible.log
     workdir: /var/lib/ansible/local
-    repo_url: git@github.com:jemorr00/ansible-pull-agents.git
+    repo_url: https://github.com/jemorr00/ansible-pull-agents.git
 
   tasks:
     - name: Install ansible
